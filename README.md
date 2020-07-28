@@ -11,8 +11,9 @@ sudo apt install ansible
 ```
 
 **Role**
-> ansible-galaxy install n0emis.bigbluebutton
-
+```
+ansible-galaxy install n0emis.bigbluebutton
+```
 **Vars**
 ```
 bbb_state: latest
