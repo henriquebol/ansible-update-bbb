@@ -1,6 +1,6 @@
 # Ansible script for update BigBlueButton
 ```
-git clone https://github.com/henriquebol/ansible_update_bbb.git
+git clone https://github.com/henriquebol/ansible-update-bbb.git
 ```
 **Ansible (ubuntu)**
 ```
