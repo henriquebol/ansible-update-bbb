@@ -1,7 +1,7 @@
 # Ansible script for update BigBlueButton
-
-> git clone https://github.com/henriquebol/ansible_update_bbb.git
-
+```
+git clone https://github.com/henriquebol/ansible_update_bbb.git
+```
 **Ansible (ubuntu)**
 ```
 sudo apt update
@@ -51,4 +51,6 @@ bbb_turn_servers:
     - name: Check Result
 ```
 **Run**
-> sudo ansible-playbook -i hosts playbook.yml -K
+```
+sudo ansible-playbook -i hosts playbook.yml -K
+```
