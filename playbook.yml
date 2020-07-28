@@ -1,0 +1,96 @@
+- hosts: bbb
+  user: user
+  become: true
+  become_user: root
+  gather_facts: yes
+  tasks:
+    - name: Update apt repo and cache on all Debian/Ubuntu boxes
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+    - name: Upgrade all packages on servers
+      apt: upgrade=dist force_apt_get=yes
+
+    - name: Check if a reboot is needed on all servers
+      register: reboot_required_file
+      stat: path=/var/run/reboot-required get_md5=no
+
+    - name: Reboot the box if kernel updated
+      reboot:
+        msg: "Reboot initiated by Ansible for kernel updates"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required_file.stat.exists
+
+    - name: BigBluebutton install
+      include_role:
+        name: n0emis.bigbluebutton
+      vars:
+        bbb_state: latest
+        bbb_coturn_enable: no
+        bbb_mute_on_start: no
+        bbb_letsencrypt_email: example@mail.com 
+        bbb_greenlight_enable: no
+        bbb_freeswitch_external_ip: "{{ inventory_hostname }}"
+        bbb_turn_servers:
+          - server: turn.server
+            port: port
+            secret: pass
+            tls: false
+          - server: turn.server
+            port: port
+            secret: pass
+            tls: true
+
+    - name: Copy default pdf
+      copy:
+        src: "{{ playbook_dir }}/files/default.pdf"
+        dest: /var/www/bigbluebutton-default/
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Copy favicon
+      copy:
+        src: "{{ playbook_dir }}/files/favicon.ico"
+        dest: /var/www/bigbluebutton-default/
+
+    - name: Copy logo
+      copy:
+        src: "{{ playbook_dir }}/files/logo.png"
+        dest: /var/bigbluebutton/playback/presentation/2.0/
+        owner: bigbluebutton
+        group: bigbluebutton
+
+    - name: Copy and extract audio (pt_BR)
+      unarchive:
+        src: "{{ playbook_dir }}/files/en.tar.gz"
+        dest: /opt/freeswitch/share/freeswitch/sounds/
+
+    - name: Recursively change ownership of a directory of audio (pt_BR)
+      file:
+        path: /opt/freeswitch/share/freeswitch/sounds/en
+        state: directory
+        recurse: yes
+        owner: freeswitch
+        group: daemon
+        mode: '0755'
+    
+    - name: Restart bbb-html5
+      systemd:
+        state: restarted
+        name: bbb-html5
+          
+    - name: Restart bbb
+      command: bbb-conf --restart
+
+    - name: Check bbb
+      command: bbb-conf --check
+      register : result
+
+    - name : Check Result
+      debug :
+        var: result.stdout_lines
+

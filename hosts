@@ -1,0 +1,6 @@
+[bbb]
+...
+
+[bbb:vars]
+ansible_ssh_user =
+ansible_ssh_port =
