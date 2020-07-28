@@ -32,15 +32,18 @@ bbb_turn_servers:
        secret: 
        tls: true
 ```
-**Hosts**
-
 **Tasks**
 ```
     - name: Update apt repo and cache on all Debian/Ubuntu boxes
     - name: Upgrade all packages on servers
     - name: Check if a reboot is needed on all servers
     - name: Reboot the box if kernel updated
+    - name: Check/Modify /etc/hosts (pendent)
     - name: BigBluebutton install
+    - name: Modify bigbluebutton.properties (pendent)
+    - name: Modify settings.yml (pendent)
+    - name: Modify head.html (pendent)
+    - name: Letsencrypt automatic renewal (pendent)
     - name: Copy default pdf
     - name: Copy favicon
     - name: Copy logo
@@ -49,7 +52,7 @@ bbb_turn_servers:
     - name: Restart bbb-html5
     - name: Restart bbb
     - name: Check bbb
-    - name: Check Result
+    - name: Debug Result
 ```
 **Run**
 ```
