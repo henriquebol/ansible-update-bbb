@@ -51,7 +51,7 @@ begin
     BigBlueButton.logger.info(host)
     email = meeting_metadata["email"].value
     BigBlueButton.logger.info(email)
-    address = 'http://domain.com.br?'
+    address = 'http://grav-webconf.virtual.ufc.br?'
     url = 'https://' + host + '/playback/presentation/2.0/playback.html?meetingId=' + meeting_id
     BigBlueButton.logger.info(url)
     resp = RestClient.get "#{address}email=#{email}&url=#{url}"

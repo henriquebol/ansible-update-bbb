@@ -1,6 +1,10 @@
-[bbb]
-...
+[bbb_sti]
 
-[bbb:vars]
-ansible_ssh_user =
-ansible_ssh_port =
+[bbb_sti:vars]
+ansible_ssh_user = 
+ansible_ssh_port = 
+
+[bbb_antigos]
+
+[bbb_antigos:vars]
+ansible_ssh_user = 
