@@ -75,5 +75,7 @@ sh-copy-id -i ~/.ssh/id_rsa.pub user@ip
 ```
 **Run**
 ```
+ansible all -m ping
+
 ansible-playbook -i hosts playbook.yml -K
 ```
