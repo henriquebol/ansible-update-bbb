@@ -48,7 +48,7 @@
       when: reboot_required_file.stat.exists
 
     - name: Script
-      shell: sudo wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v xenial-22 -s "{{ ansible_fqdn }}" -e '{{ EMAIL }}' -c '{{ TURN_SERVER }}:{{ TURN_SECRET }}'
+      shell: sudo wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s "{{ ansible_fqdn }}" -e '{{ EMAIL }}' -c '{{ TURN_SERVER }}:{{ TURN_SECRET }}'
 
     # - name: BigBluebutton install
     #   include_role:
