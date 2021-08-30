@@ -6,16 +6,16 @@
   tasks:
     - name: "Debug facts"
       debug: msg="ansible_fqdn is  {{ ansible_fqdn }}"
-    # debug: var=ansible_facts
+      debug: var=ansible_facts
 
-    # - name: Modify /etc/hosts
-    #   lineinfile:
-    #     path: /etc/hosts
-    #     regexp: "^{{ inventory_hostname }}"
-    #     line: "{{ inventory_hostname }}    {{ ansible_fqdn }} {{ ansible_hostname }}"        
-    #     owner: root
-    #     group: root
-    #     mode: '0644'
+    - name: Modify /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        regexp: "^{{ inventory_hostname }}"
+        line: "{{ inventory_hostname }}    {{ ansible_fqdn }} {{ ansible_hostname }}"        
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Debug /etc/hosts
       shell: cat "/etc/hosts"
