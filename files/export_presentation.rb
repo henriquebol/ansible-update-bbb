@@ -30,6 +30,7 @@ BigBlueButton.logger.info("Started exporting presentation for [#{meeting_id}]")
 
 @published_files = "/var/bigbluebutton/published/presentation/#{meeting_id}"
 @nfs_files = "/mnt/scalelite-recordings/var/bigbluebutton/published/download"
+@meeting_id = meeting_id
 
 # Creates scratch directories
 FileUtils.mkdir_p(["#{@published_files}/chats", "#{@published_files}/cursor", "#{@published_files}/frames",
@@ -705,7 +706,7 @@ def export_presentation
   add_captions if CAPTION_SUPPORT
 
   #FileUtils.mv("#{@published_files}/meeting-tmp.mp4", "#{@published_files}/meeting.mp4")
-  FileUtils.mv("#{@published_files}/meeting-tmp.mp4", "#{@nfs_files}/#{meeting_id}.mp4")
+  FileUtils.mv("#{@published_files}/meeting-tmp.mp4", "#{@nfs_files}/#{@meeting_id}.mp4")
   BigBlueButton.logger.info("Exported recording available at #{@published_files}/meeting.mp4. Rendering took: #{Time.now - start}")
 
   add_greenlight_buttons(metadata)
