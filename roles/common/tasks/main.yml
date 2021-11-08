@@ -1,0 +1,30 @@
+---
+- name: Atualização do Sistema Operacional
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+
+- name: Instalação de pacotes necessarios para o BigBlueButton
+  apt: name={{ item }} state=latest update_cache=yes
+  loop: 
+    - aptitude
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - python3
+    - python3-pip
+    - python-apt
+    - python-passlib
+    - software-properties-common
+    - apache2-utils
+    - nfs-common
+
+- name:  configurando Timezone to America/Fortaleza
+  command: sudo timedatectl set-timezone America/Fortaleza
+
+- name: Ativando as alterações
+  command: sudo timedatectl
+
+- name: Restart Cron
+  command: sudo /etc/init.d/cron restart     
+
+...

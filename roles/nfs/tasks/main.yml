@@ -1,0 +1,178 @@
+---
+# NFS e Scalelite222
+    - name: criando grupo
+      ansible.builtin.group:
+        name: scalelite-spool
+        gid: 2000
+
+    - name: Adicionando o user bigbluebutton no grupo scalelite-spool
+      ansible.builtin.user:
+        name: bigbluebutton
+        group: scalelite-spool
+
+    - name: Criando o diretório /mnt/scalelite-recordings
+      ansible.builtin.file:
+        path: /mnt/scalelite-recordings
+        state: directory
+        mode: '755'
+        owner: bigbluebutton
+        group: scalelite-spool
+    
+   
+    #To install it use: ansible-galaxy collection install ansible.posix
+    - name: Montando o NFS
+      ansible.posix.mount:
+        src: "{{ ip_nfs }}:/mnt/nfsfiles/scalelite"
+        path: /mnt/scalelite-recordings
+        opts: rw,sync,hard,intr
+        state: mounted
+        fstype: nfs
+        
+    - name: Download script scalelite_post_publish
+      get_url:
+        url: https://raw.githubusercontent.com/blindsidenetworks/scalelite/master/bigbluebutton/scalelite_post_publish.rb
+        dest: /usr/local/bigbluebutton/core/scripts/post_publish/scalelite_post_publish.rb
+       
+  
+    # bbb-recording-exporter
+    - name: Download export_presentation.rb
+      get_url:
+        url: https://raw.githubusercontent.com/henriquebol/ansible-update-bbb/master/files/export_presentation.rb
+        dest: /usr/local/bigbluebutton/core/scripts/post_publish/export_presentation.rb
+    
+    - name: Download interval_tree.rb
+      get_url:
+        url: https://raw.githubusercontent.com/danielpetri1/bbb-recording-exporter/main/lib/interval_tree.rb
+        dest: /usr/local/bigbluebutton/core/lib/recordandplayback/interval_tree.rb
+
+    - name: Criando scalelite.yml
+      copy:
+        dest: /usr/local/bigbluebutton/core/scripts/scalelite.yml
+        content: |
+          work_dir: /var/bigbluebutton/recording/scalelite
+          spool_dir: /mnt/scalelite-recordings/var/bigbluebutton/spool
+
+    # BigBlueButton Exporter
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: ~/bbb-exporter
+        state: directory
+        mode: '0755'
+  
+  #  Instalando aptitude e Docker    
+    - name: Install aptitude using apt
+      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+    - name: Install required system packages
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'python-passlib','software-properties-common','apache2-utils']
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt: update_cache=yes name=docker-ce state=latest
+
+    - name: Update apt and install docker-compose
+      apt: update_cache=yes name=docker-compose state=latest
+
+
+    - name: Create docker-compose file
+      get_url:
+        url: https://raw.githubusercontent.com/greenstatic/bigbluebutton-exporter/master/extras/docker-compose.exporter.yaml
+        dest: ~/bbb-exporter/docker-compose.yaml
+       
+
+    - name: print secret
+      command: "bbb-conf --secret"
+      register: secret
+    
+    - name: captura a saida secret
+      set_fact:
+        secret: "{{ secret.stdout | regex_search('Secret: (.+)', '\\1') | first }}"
+
+    - name: Criando scalelite.yml
+      copy:
+        dest: ~/bbb-exporter/secrets.env
+        content: |
+          API_BASE_URL=https://{{ DOMINIO }}/bigbluebutton/api/
+          API_SECRET={{ secret }}
+
+    - name: docker-compose
+      command: sudo docker-compose up -d
+      args:
+        chdir: ~/bbb-exporter/          
+  
+    - name: adicionadn user
+      htpasswd:
+        path: /etc/nginx/.htpasswd
+        name: metrics
+        password: "{{ pass_user }}"
+        crypt_scheme: apr_md5_crypt
+
+   
+    - name: Copy default pdf
+      copy:
+        src: "{{ playbook_dir }}/files/monitoring.nginx"
+        dest: /etc/bigbluebutton/nginx/
+        mode: '0755'
+
+
+# BigBlueButton Exporter - node_exporter
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: ~/node_exporter
+        state: directory
+        mode: '0755'
+
+    - name: Create docker-compose file
+      get_url:
+        url: https://raw.githubusercontent.com/greenstatic/bigbluebutton-exporter/master/extras/node_exporter/docker-compose.yaml
+        dest: ~/node_exporter/docker-compose.yaml
+
+    - name: docker-compose 
+      command: sudo docker-compose up -d
+      args:
+        chdir: ~/node_exporter/   
+
+    - name: Nginx exporter
+      get_url:
+        url: https://raw.githubusercontent.com/henriquebol/ansible-update-bbb/master/files/node_exporter.nginx
+        dest: /etc/bigbluebutton/nginx/node_exporter.nginx
+        mode: '0755'
+ 
+     
+  # Restart dos serviços
+    - name: apache2-utils
+      command: sudo nginx -t
+
+    - name: apache2-utils
+      command: sudo systemctl start nginx
+
+    - name: apache2-utils
+      command: sudo systemctl reload nginx
+
+
+    - name: Restart bbb-html5
+      systemd:
+        state: restarted
+        name: bbb-html5
+            
+    - name: Restart bbb
+      command: bbb-conf --restart
+
+    - name: Check bbb
+      command: bbb-conf --check
+      register : result
+  
+    - debug :
+        var: result.stdout_lines
+
+
