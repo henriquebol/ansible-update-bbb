@@ -35,12 +35,15 @@ bbb_turn_servers:
 ```
     - name: "Debug facts"
     - name: Check/Modify /etc/hosts (commented)
+    - name: Setting timezone
     - name: Debug /etc/hosts
     - name: Update apt repo and cache on all Debian/Ubuntu boxes
         # In case of invalid signature in the update:
             # sudo apt-key list | grep -A 1 expired
             # sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys <KEY>
     - name: Upgrade all packages on servers
+    - name: configurando FQDN
+    - name: Alterando hosts
     - name: Check if a reboot is needed on all servers
     - name: Reboot the box if kernel updated
     - name: BigBluebutton install
@@ -68,6 +71,32 @@ bbb_turn_servers:
     - name: Restart bbb
     - name: Check bbb
     - name: Debug Result
+    - name: criando grupo
+    - name: Adicionando o user bigbluebutton no grupo scalelite-spool
+    - name: Criando o diretório /mnt/scalelite-recordings
+    - name: Montando o NFS
+    - name: Download script scalelite_post_publish
+    - name: Download export_presentation.rb # bbb-recording-exporter
+    - name: Download interval_tree.rb
+    - name: Criando scalelite.yml
+    - name: Create a directory if it does not exist # BigBlueButton Exporter
+    - name: Install aptitude using apt
+    - name: Install required system packages
+    - name: Add Docker GPG apt Key
+    - name: Add Docker Repository
+    - name: Update apt and install docker-ce
+    - name: Update apt and install docker-compose
+    - name: Create docker-compose file
+    - name: print secret
+    - name: captura a saida secret
+    - name: Criando secrets.env
+    - name: docker-compose
+    - name: adicionadn user
+    - name: Copy monitoring.nginx
+    - name: Create a directory if it does not exist # BigBlueButton Exporter - node_exporter
+    - name: Create docker-compose file
+    - name: docker-compose 
+    - name: Nginx exporter
 ```
 **SSH**
 ```
