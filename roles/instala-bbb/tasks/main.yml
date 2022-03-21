@@ -1,6 +1,6 @@
 ---
-- name: Instalando BigBlueButton - Script
-  shell: sudo wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-23 -s "{{ DOMINIO }}" -e '{{ EMAIL }}' -c '{{ TURN_SERVER }}:{{ TURN_SECRET }}'
+- name: [NOVO] Instalando BigBlueButton - Script
+  shell: sudo wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v bionic-24 -s "{{ DOMINIO }}" -e '{{ EMAIL }}' -c '{{ TURN_SERVER }}:{{ TURN_SECRET }}'
 
 - name: Enable playback of recordings on iOS
   lineinfile:
@@ -15,6 +15,11 @@
     owner: root
     group: root
     mode: '0755'
+
+- name: [NOVO] Removendo favicon default
+  ansible.builtin.file:
+    path: /var/www/bigbluebutton-default/images/favicon.png
+    state: absent
 
 - name: Copy favicon
   copy:
@@ -51,7 +56,7 @@
 - name: install rest-client gem 
   command: gem install rest-client
 
-- name: Modify bigbluebutton.properties (defaultWelcomeMessageFooter, logoutURL, joinViaHTML5Client)
+- name: [NOVO] Modify bigbluebutton.properties (defaultWelcomeMessageFooter, logoutURL, joinViaHTML5Client)
   lineinfile:
     path=/usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp={{ item.regexp }}
@@ -74,6 +79,7 @@
   with_items:
     - { regexp: '^    clientTitle:', line: '    clientTitle: {{ CLIENT_TITLE }}' }
     - { regexp: '^    copyright:', line: '    copyright: {{ COPYRIGHT }}' }
+    - { regexp: '^    helpLink:', line: '    helpLink: {{ SUPPORT_URL }}' }
 
 - name: Modify layout
   lineinfile:
