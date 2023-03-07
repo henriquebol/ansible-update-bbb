@@ -1,0 +1,28 @@
+---
+  - name: apache2-utils
+    command: sudo nginx -t
+
+  - name: apache2-utils
+    command: sudo systemctl start nginx
+
+  - name: apache2-utils
+    command: sudo systemctl reload nginx
+
+  - name: Restart bbb-html5
+    systemd:
+      state: restarted
+      name: bbb-html5
+            
+  - name: Restart bbb
+    command: bbb-conf --restart
+
+  - name: Unconditionally reboot the machine with all defaults
+    reboot:
+
+  - name: Check bbb
+    command: bbb-conf --check
+    register : result
+  
+  - debug :
+      var: result.stdout_lines
+...

@@ -1,0 +1,42 @@
+---
+- name: Download script createthumbs
+  get_url: 
+    url: https://raw.githubusercontent.com/henriquebol/ansible-update-bbb/master/files/backgrounds/create_thumbs.sh
+    dest: ~/create_thumbs.sh
+
+- name: Download backgrounds
+  get_url: 
+    url: https://github.com/henriquebol/ansible-update-bbb/raw/master/files/backgrounds/images.zip
+    dest: ~/images.zip
+        
+- name: Copy and extract backgrounds
+  ansible.builtin.unarchive:
+    src: ~/images.zip
+    dest: /usr/share/meteor/bundle/programs/web.browser/app/resources/images/virtual-backgrounds/
+    remote_src: yes
+    
+- name: Create Thumbs - Script
+  command: sh ~/create_thumbs.sh
+
+#- name: Add filenames in virtualBackgrounds
+#  lineinfile:
+#    path: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+#    regexp: '^- home.jpg'
+#    content: |
+#      - home.jpg
+#      - coffeeshop.jpg
+#      - board.jpg
+#      - biblio.jpg
+#      - concha.jpg
+#      - cultura.jpg
+#      - logo.jpg
+#      - mangueira.jpg
+#      - reitoria.jpg
+#      - ru.jpg
+#      - sala.jpg
+#      - solar.jpg
+
+#- name: Restart bbb
+#  command: bbb-conf --restart
+
+...

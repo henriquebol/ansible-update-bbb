@@ -5,8 +5,12 @@
   become_user: root
   gather_facts: yes
   roles:
-    #  - reconfigura-host
-    #  - common
-     - instala-bbb
-     - nfs
-    
+    - reconfigura-host
+    - common
+    - instala-bbb
+    - nfs
+    - backgrounds
+    # - extra
+    - restart
+    - test
+

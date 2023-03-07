@@ -17,6 +17,8 @@
     - software-properties-common
     - apache2-utils
     - nfs-common
+    - libsystemd-dev
+    - ruby-dev
 
 - name:  configurando Timezone to America/Fortaleza
   command: sudo timedatectl set-timezone America/Fortaleza

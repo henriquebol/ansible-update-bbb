@@ -1,0 +1,16 @@
+---
+  - name: print secret
+    command: "bbb-conf --secret"
+    register: secret
+
+  - debug :
+      var: secret.stdout_lines
+
+
+  #- name: Check bbb
+  #  command: bbb-conf --check
+  #  register : result
+
+  #- debug :
+  #    var: result.stdout_lines
+...

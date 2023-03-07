@@ -1,0 +1,29 @@
+---
+#- name: Check IPV6
+#  ansible.builtin.shell: "ip addr | grep inet6"
+#  register: inet6
+
+#- debug :
+#    var: inet6.stdout_lines
+
+#- name: Fix webcam problem
+#  lineinfile:
+#    path: /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini
+#    regexp: '^;iceTcp=0'
+#    line: 'iceTcp=0'
+
+#- name: Remove file (delete file)
+#  ansible.builtin.file:
+#    path: /etc/bigbluebutton/bbb-webrtc-sfu/production.yml
+#    state: absent
+
+#- name: Change to MediaSoup (copy bbb-html5.yml)
+#  copy:
+#    src: "{{ playbook_dir }}/files/bbb-html5.yml"
+#    dest: /etc/bigbluebutton/
+#    owner: bigbluebutton
+#    group: bigbluebutton
+
+#- name: Restart bbb
+#  command: bbb-conf --restart
+...

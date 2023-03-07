@@ -33,11 +33,10 @@
         url: https://raw.githubusercontent.com/blindsidenetworks/scalelite/master/bigbluebutton/scalelite_post_publish.rb
         dest: /usr/local/bigbluebutton/core/scripts/post_publish/scalelite_post_publish.rb
        
-  
     # bbb-recording-exporter
     - name: Download export_presentation.rb
       get_url:
-        url: https://raw.githubusercontent.com/henriquebol/ansible-update-bbb/master/files/export_presentation.rb
+        url: https://raw.githubusercontent.com/henriquebol/ansible-update-bbb/master/files/export_presentation.rb  
         dest: /usr/local/bigbluebutton/core/scripts/post_publish/export_presentation.rb
     
     - name: Download interval_tree.rb
@@ -110,7 +109,10 @@
       args:
         chdir: ~/bbb-exporter/          
   
-    - name: adicionadn user
+    - name: Install latest passlib with pip
+      pip: name=passlib
+
+    - name: adicionando user
       htpasswd:
         path: /etc/nginx/.htpasswd
         name: metrics
@@ -150,29 +152,29 @@
  
      
   # Restart dos serviços
-    - name: apache2-utils
-      command: sudo nginx -t
+#    - name: apache2-utils
+#      command: sudo nginx -t
 
-    - name: apache2-utils
-      command: sudo systemctl start nginx
+#    - name: apache2-utils
+#      command: sudo systemctl start nginx
 
-    - name: apache2-utils
-      command: sudo systemctl reload nginx
+#    - name: apache2-utils
+#      command: sudo systemctl reload nginx
 
 
-    - name: Restart bbb-html5
-      systemd:
-        state: restarted
-        name: bbb-html5
+#   - name: Restart bbb-html5
+#      systemd:
+#        state: restarted
+#        name: bbb-html5
             
-    - name: Restart bbb
-      command: bbb-conf --restart
+#    - name: Restart bbb
+#      command: bbb-conf --restart
 
-    - name: Check bbb
-      command: bbb-conf --check
-      register : result
+#    - name: Check bbb
+#      command: bbb-conf --check
+#      register : result
   
-    - debug :
-        var: result.stdout_lines
+#    - debug :
+#        var: result.stdout_lines
 
 

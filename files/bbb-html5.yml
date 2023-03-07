@@ -1,0 +1,22 @@
+public:
+  app:
+    clientTitle: Solar webconferência
+    copyright: Solar webconferência - ©2023 BigBlueButton Inc.
+    helpLink: https://www.youtube.com/watch?v=E14j1eByZbU
+  pads:
+    url:
+  virtualBackgrounds:
+    fileNames:
+      - home.jpg
+      - coffeeshop.jpg
+      - board.jpg
+      - biblio.jpg
+      - concha.jpg
+      - cultura.jpg
+      - logo.jpg
+      - mangueira.jpg
+      - reitoria.jpg
+      - ru.jpg
+      - sala.jpg
+      - solar.jpg
+

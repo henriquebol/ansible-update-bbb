@@ -1,10 +1,27 @@
-[bbb_sti]
+[all]
 
-[bbb_sti:vars]
-ansible_ssh_user = 
-ansible_ssh_port = 
+# b... ansible_ssh_host=...
+#...
 
-[bbb_antigos]
 
-[bbb_antigos:vars]
-ansible_ssh_user = 
+
+[all:vars]
+ansible_become=
+ansible_ssh_port=
+ansible_ssh_user=
+ansible_ssh_private_key_file=
+ansible_become_method=
+ansible_become_user=
+ansible_become_pass=
+
+variaveis globais
+DOMINIO=
+EMAIL=
+TURN_SERVER=
+TURN_SECRET=
+SUPPORT_URL=
+SUPPORT_EMAIL=
+FORM_LOGOUT_URL=
+CLIENT_TITLE=
+COPYRIGHT=
+pass_user=
